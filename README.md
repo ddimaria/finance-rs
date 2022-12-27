@@ -1,10 +1,18 @@
+<!-- omit in toc -->
 # Finance functions in Rust
 
 Blazingly fast financial functions in Rust.  Operations are parallelized when applicable.
 
+- [Present Value](#present-value)
+- [Future Value](#future-value)
+- [Net Present Value](#net-present-value)
+
+<!-- omit in toc -->
 ## API
 
-### present_value(rate: f64, future_cash_flow: f64, num_periods: f64) -> f64
+### Present Value
+
+> present_value(rate: f64, future_cash_flow: f64, num_periods: f64) -> f64
 
 ```rust
 let rate = 0.05;
@@ -15,7 +23,9 @@ let result = present_value(rate, future_cash_flow, num_periods);
 assert_eq!(result, 822.7024747918819);
 ```
 
-### future_value(rate: f64, present_cash_flow: f64, num_periods: f64) -> f64
+### Future Value
+
+> future_value(rate: f64, present_cash_flow: f64, num_periods: f64) -> f64
 
 ```rust
 let rate = 0.045;
@@ -26,7 +36,9 @@ let result = future_value(rate, present_cash_flow, num_periods);
 assert_eq!(result, 17417.541987820376);
 ```
 
-### net_present_value(rate: f64, cash_flows: &[f64]) -> f64
+### Net Present Value
+
+> net_present_value(rate: f64, cash_flows: &[f64]) -> f64
 
 ```rust
 let rate = 0.1;
