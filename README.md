@@ -1,6 +1,8 @@
 <!-- omit in toc -->
 # Finance functions in Rust
 
+[![CI](https://github.com/ddimaria/finance-rs/actions/workflows/ci.yaml/badge.svg)](https://github.com/ddimaria/finance-rs/actions/workflows/ci.yaml)
+
 Blazingly fast financial functions in Rust.  Operations are parallelized when applicable.
 
 - [Present Value](#present-value)
