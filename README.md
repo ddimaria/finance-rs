@@ -13,6 +13,7 @@ Blazingly fast financial functions in Rust.  Operations are parallelized when ap
 - [Return on Investment](#return-on-investment)
 - [Amortization](#amortization)
 - [Profitability Index](#profitability-index)
+- [Discount Factor](#discount-factor)
 
 <!-- omit in toc -->
 ## API
@@ -129,5 +130,23 @@ let cash_flows: [f64; 6] = [-40000.0, 18000.0, 12000.0, 10000.0, 9000.0, 6000.0]
 let result = profitability_index(10.0, &cash_flows);
 
 assert_eq!(result, 0.10083669148282211);
+```
+
+### Discount Factor
+
+> discount_factor(rate: f64, num_periods: i32) -> Vec<f64>
+
+```rust
+let result = discount_factor(10.0, 6);
+assert_eq!(
+    result,
+    [
+        1.0,
+        0.9090909090909091,
+        0.8264462809917354,
+        0.7513148009015775,
+        0.6830134553650705
+    ]
+);
 ```
 

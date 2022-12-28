@@ -99,6 +99,13 @@ pub fn profitability_index(rate: f64, cash_flows: &[f64]) -> f64 {
     total / cash_flows[0].abs()
 }
 
+pub fn discount_factor(rate: f64, num_periods: i32) -> Vec<f64> {
+    (1..num_periods)
+        .into_par_iter()
+        .map(|period| 1.0 / f64::powf(1.0 + rate / 100.0, period as f64 - 1.0))
+        .collect()
+}
+
 pub fn round(value: f64) -> f64 {
     (value * 100.0).round() / 100.0
 }
@@ -244,5 +251,20 @@ mod tests {
         let cash_flows: [f64; 6] = [-40000.0, 18000.0, 12000.0, 10000.0, 9000.0, 6000.0];
         let result = profitability_index(10.0, &cash_flows);
         assert_eq!(round_decimal(result), 0.1008);
+    }
+
+    #[test]
+    fn discount_factor_basic() {
+        let result = discount_factor(10.0, 6);
+        assert_eq!(
+            result,
+            [
+                1.0,
+                0.9090909090909091,
+                0.8264462809917354,
+                0.7513148009015775,
+                0.6830134553650705
+            ]
+        );
     }
 }
