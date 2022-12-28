@@ -85,12 +85,16 @@ pub fn amortization(
 
 pub fn profitability_index(rate: f64, cash_flows: &[f64]) -> f64 {
     let total = cash_flows
-        .iter()
+        .par_iter()
         .enumerate()
-        .fold(0.0, |acc, (index, cash_flow)| {
-            let discount_factor = 1.0 / f64::powf(1.0 + rate / 100.0, index as f64 - 1.0);
-            acc + cash_flow * discount_factor
-        });
+        .fold(
+            || 0.0,
+            |acc, (index, cash_flow)| {
+                let discount_factor = 1.0 / f64::powf(1.0 + rate / 100.0, index as f64 - 1.0);
+                acc + cash_flow * discount_factor
+            },
+        )
+        .sum::<f64>();
 
     total / cash_flows[0].abs()
 }
