@@ -14,6 +14,7 @@ Blazingly fast financial functions in Rust.  Operations are parallelized when ap
 - [Amortization](#amortization)
 - [Profitability Index](#profitability-index)
 - [Discount Factor](#discount-factor)
+- [Compound Interest](#compound-interest)
 
 <!-- omit in toc -->
 ## API
@@ -150,3 +151,17 @@ assert_eq!(
 );
 ```
 
+### Compound Interest
+
+> compound_interest(
+    rate: f64,
+    num_compoundings: f64,
+    principal: f64,
+    num_periods: f64,
+) -> f64
+
+```rust
+let result = compound_interest(4.3, 4.0, 1500.0, 6.0);
+
+assert_eq!(result, 1938.8368221341054);
+```

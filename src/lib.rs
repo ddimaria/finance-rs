@@ -106,6 +106,19 @@ pub fn discount_factor(rate: f64, num_periods: i32) -> Vec<f64> {
         .collect()
 }
 
+pub fn compound_interest(
+    rate: f64,
+    num_compoundings: f64,
+    principal: f64,
+    num_periods: f64,
+) -> f64 {
+    principal
+        * f64::powf(
+            1.0 + ((rate / 100.0) / num_compoundings),
+            num_compoundings * num_periods,
+        )
+}
+
 pub fn round(value: f64) -> f64 {
     (value * 100.0).round() / 100.0
 }
@@ -267,4 +280,10 @@ mod tests {
             ]
         );
     }
+}
+
+#[test]
+fn compound_interest_basic() {
+    let result = compound_interest(4.3, 4.0, 1500.0, 6.0);
+    assert_eq!(result, 1938.8368);
 }
