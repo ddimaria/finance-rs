@@ -8,6 +8,9 @@ Blazingly fast financial functions in Rust.  Operations are parallelized when ap
 - [Present Value](#present-value)
 - [Future Value](#future-value)
 - [Net Present Value](#net-present-value)
+- [Internal Rate of Return](#internal-rate-of-return)
+- [Payback Period](#payback-period)
+- [Return on Investment](#return-on-investment)
 
 <!-- omit in toc -->
 ## API
@@ -48,4 +51,37 @@ let cash_flows: [f64; 4] = [-500000.00, 200000.00, 300000.00, 200000.00];
 let result = net_present_value(rate, &cash_flows);
 
 assert_eq!(result, 80015.02629601792);
+```
+
+
+### Internal Rate of Return
+
+> internal_rate_of_return(cash_flows: &[f64], guess: Option<f64>) -> Option<f64>
+
+```rust
+let cash_flows: [f64; 6] = [-5000.0, 1700.0, 1900.0, 1600.0, 1500.0, 700.0];
+let result = internal_rate_of_return(&cash_flows, None);
+
+assert_eq!(result.unwrap(), 0.05231449481311805);
+```
+
+### Payback Period
+
+> payback_period(cash_flows: &[f64], num_periods: f64) -> f64
+
+```rust
+let cash_flows: [f64; 6] = [-50.0, 10.0, 13.0, 16.0, 19.0, 22.0];
+let result = payback_period(&cash_flows, 5.0);
+
+assert_eq!(result, 3.4210526315789473);
+```
+
+### Return on Investment
+
+> return_on_investment(present_cash_flow: f64, earnings: f64) -> f64
+
+```rust
+let result = return_on_investment(-55000.0, 60000.0);
+
+assert_eq!(result, 0.09090909090909091);
 ```
