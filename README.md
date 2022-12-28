@@ -12,6 +12,7 @@ Blazingly fast financial functions in Rust.  Operations are parallelized when ap
 - [Payback Period](#payback-period)
 - [Return on Investment](#return-on-investment)
 - [Amortization](#amortization)
+- [Profitability Index](#profitability-index)
 
 <!-- omit in toc -->
 ## API
@@ -118,3 +119,15 @@ let result = amortization(
 
 assert_eq!(result, 400.7589719124707);
 ```
+
+### Profitability Index
+
+> profitability_index(rate: f64, cash_flows: &[f64]) -> f64
+
+```rust
+let cash_flows: [f64; 6] = [-40000.0, 18000.0, 12000.0, 10000.0, 9000.0, 6000.0];
+let result = profitability_index(10.0, &cash_flows);
+
+assert_eq!(result, 0.10083669148282211);
+```
+

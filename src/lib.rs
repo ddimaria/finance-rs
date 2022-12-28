@@ -83,6 +83,18 @@ pub fn amortization(
     principal * (numerator / denominator)
 }
 
+pub fn profitability_index(rate: f64, cash_flows: &[f64]) -> f64 {
+    let total = cash_flows
+        .iter()
+        .enumerate()
+        .fold(0.0, |acc, (index, cash_flow)| {
+            let discount_factor = 1.0 / f64::powf(1.0 + rate / 100.0, index as f64 - 1.0);
+            acc + cash_flow * discount_factor
+        });
+
+    total / cash_flows[0].abs()
+}
+
 pub fn round(value: f64) -> f64 {
     (value * 100.0).round() / 100.0
 }
@@ -221,5 +233,12 @@ mod tests {
             pay_at_beginning,
         );
         assert_eq!(round_decimal(result), 398.2698);
+    }
+
+    #[test]
+    fn profitability_index_basic() {
+        let cash_flows: [f64; 6] = [-40000.0, 18000.0, 12000.0, 10000.0, 9000.0, 6000.0];
+        let result = profitability_index(10.0, &cash_flows);
+        assert_eq!(round_decimal(result), 0.1008);
     }
 }
