@@ -11,6 +11,7 @@ Blazingly fast financial functions in Rust.  Operations are parallelized when ap
 - [Internal Rate of Return](#internal-rate-of-return)
 - [Payback Period](#payback-period)
 - [Return on Investment](#return-on-investment)
+- [Amortization](#amortization)
 
 <!-- omit in toc -->
 ## API
@@ -84,4 +85,36 @@ assert_eq!(result, 3.4210526315789473);
 let result = return_on_investment(-55000.0, 60000.0);
 
 assert_eq!(result, 0.09090909090909091);
+```
+
+
+### Amortization
+> enum AmortizationPeriod {
+    Month,
+    Year
+}
+
+> amortization(
+    principal: f64,
+    rate: f64,
+    num_periods: f64,
+    amortization_period: AmortizationPeriod,
+    pay_at_beginning: bool,
+) -> f64
+
+```rust
+let principal = 20000.0;
+let rate = 7.5;
+let num_periods = 5.0;
+let amortization_period = AmortizationPeriod::Year;
+let pay_at_beginning = false;
+let result = amortization(
+    principal,
+    rate,
+    num_periods,
+    amortization_period,
+    pay_at_beginning,
+);
+
+assert_eq!(result, 400.7589719124707);
 ```

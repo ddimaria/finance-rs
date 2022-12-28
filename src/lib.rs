@@ -3,11 +3,11 @@ use rayon::prelude::*;
 mod utils;
 
 pub fn present_value(rate: f64, future_cash_flow: f64, num_periods: f64) -> f64 {
-    future_cash_flow / f64::powf(1_f64 + rate, num_periods)
+    future_cash_flow / f64::powf(1.0 + rate, num_periods)
 }
 
 pub fn future_value(rate: f64, present_cash_flow: f64, num_periods: f64) -> f64 {
-    present_cash_flow * f64::powf(1_f64 + rate, num_periods)
+    present_cash_flow * f64::powf(1.0 + rate, num_periods)
 }
 
 pub fn net_present_value(rate: f64, cash_flows: &[f64]) -> f64 {
@@ -16,7 +16,7 @@ pub fn net_present_value(rate: f64, cash_flows: &[f64]) -> f64 {
         .enumerate()
         .map(|(index, cash_flow)| match index {
             0 => *cash_flow,
-            _ => cash_flow / f64::powf(1_f64 + rate, index as f64),
+            _ => cash_flow / f64::powf(1.0 + rate, index as f64),
         })
         .sum::<f64>()
 }
@@ -52,6 +52,35 @@ pub fn payback_period(cash_flows: &[f64], num_periods: f64) -> f64 {
 
 pub fn return_on_investment(present_cash_flow: f64, earnings: f64) -> f64 {
     (earnings - present_cash_flow.abs()) / present_cash_flow.abs()
+}
+
+pub enum AmortizationPeriod {
+    Month,
+    Year,
+}
+
+pub fn amortization(
+    principal: f64,
+    rate: f64,
+    num_periods: f64,
+    amortization_period: AmortizationPeriod,
+    pay_at_beginning: bool,
+) -> f64 {
+    let rate_per_period = rate / 12.0 / 100.0;
+    let multiplier = match amortization_period {
+        AmortizationPeriod::Month => 1.0,
+        AmortizationPeriod::Year => 12.0,
+    };
+    let mut num_interest_accruals = num_periods * multiplier;
+
+    if pay_at_beginning {
+        num_interest_accruals -= 1.0;
+    }
+
+    let numerator = rate_per_period * f64::powf(1.0 + rate_per_period, num_interest_accruals);
+    let denominator = f64::powf(1.0 + rate_per_period, num_periods * multiplier) - 1.0;
+
+    principal * (numerator / denominator)
 }
 
 pub fn round(value: f64) -> f64 {
@@ -124,5 +153,73 @@ mod tests {
     fn return_on_investment_basic() {
         let result = return_on_investment(-55000.0, 60000.0);
         assert_eq!(round_decimal(result), 0.0909);
+    }
+
+    #[test]
+    fn amortization_years() {
+        let principal = 20000.0;
+        let rate = 7.5;
+        let num_periods = 5.0;
+        let amortization_period = AmortizationPeriod::Year;
+        let pay_at_beginning = false;
+        let result = amortization(
+            principal,
+            rate,
+            num_periods,
+            amortization_period,
+            pay_at_beginning,
+        );
+        assert_eq!(round_decimal(result), 400.759);
+    }
+
+    #[test]
+    fn amortization_months() {
+        let principal = 20000.0;
+        let rate = 7.5;
+        let num_periods = 60.0;
+        let amortization_period = AmortizationPeriod::Month;
+        let pay_at_beginning = false;
+        let result = amortization(
+            principal,
+            rate,
+            num_periods,
+            amortization_period,
+            pay_at_beginning,
+        );
+        assert_eq!(round_decimal(result), 400.759);
+    }
+
+    #[test]
+    fn amortization_years_pay_at_beginning() {
+        let principal = 20000.0;
+        let rate = 7.5;
+        let num_periods = 5.0;
+        let amortization_period = AmortizationPeriod::Year;
+        let pay_at_beginning = true;
+        let result = amortization(
+            principal,
+            rate,
+            num_periods,
+            amortization_period,
+            pay_at_beginning,
+        );
+        assert_eq!(round_decimal(result), 398.2698);
+    }
+
+    #[test]
+    fn amortization_months_pay_at_beginning() {
+        let principal = 20000.0;
+        let rate = 7.5;
+        let num_periods = 60.0;
+        let amortization_period = AmortizationPeriod::Month;
+        let pay_at_beginning = true;
+        let result = amortization(
+            principal,
+            rate,
+            num_periods,
+            amortization_period,
+            pay_at_beginning,
+        );
+        assert_eq!(round_decimal(result), 398.2698);
     }
 }
